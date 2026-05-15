@@ -44,6 +44,10 @@
 ### 安装
 
 ```bash
+# 使用 uv（极速，推荐）⚡
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv pip install mlx-lm
+
 # 使用 pip 安装
 pip install mlx-lm
 
