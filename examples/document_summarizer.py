@@ -6,9 +6,10 @@
 """
 
 from mlx_lm import load, generate
+from mlx_lm.sample_utils import make_sampler
 
 
-def summarize_document(model, tokenizer, text: str, max_length: int = 200) -> str:
+def summarize_document(model, tokenizer, sampler, text: str, max_length: int = 200) -> str:
     """对文档进行摘要"""
     prompt = f"请用简练的语言总结以下文档的主要内容：\n\n{text}"
 
@@ -21,8 +22,8 @@ def summarize_document(model, tokenizer, text: str, max_length: int = 200) -> st
         model,
         tokenizer,
         prompt=formatted_prompt,
-        max_tokens=max_length,
-        temp=0.5
+        sampler=sampler,
+        max_tokens=max_length
     )
 
     return summary
@@ -31,6 +32,8 @@ def summarize_document(model, tokenizer, text: str, max_length: int = 200) -> st
 def main():
     print("正在加载模型...")
     model, tokenizer = load("mlx-community/Qwen2-7B-Instruct-4bit")
+    # 摘要使用较低温度，输出更稳定
+    sampler = make_sampler(temp=0.3, top_p=0.9)
     print("模型加载完成！\n")
 
     # 示例文档
@@ -53,7 +56,7 @@ def main():
     print(document)
     print("\n" + "=" * 50 + "\n")
 
-    summary = summarize_document(model, tokenizer, document)
+    summary = summarize_document(model, tokenizer, sampler, document)
 
     print("摘要:")
     print(summary)

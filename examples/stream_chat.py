@@ -6,12 +6,16 @@
 """
 
 from mlx_lm import load, stream_generate
+from mlx_lm.sample_utils import make_sampler
 
 
 def main():
     print("正在加载模型...")
     model, tokenizer = load("mlx-community/Qwen2-7B-Instruct-4bit")
     print("模型加载完成！\n")
+
+    # 创建采样器
+    sampler = make_sampler(temp=0.8, top_p=0.9)
 
     # 流式生成示例
     prompt = "请讲一个关于科技的有趣故事"
@@ -24,8 +28,8 @@ def main():
         model,
         tokenizer,
         prompt=prompt,
-        max_tokens=500,
-        temp=0.8
+        sampler=sampler,
+        max_tokens=500
     ):
         print(response.text, end="", flush=True)
 

@@ -6,6 +6,7 @@
 """
 
 from mlx_lm import load, generate
+from mlx_lm.sample_utils import make_sampler
 
 
 class ChatBot:
@@ -13,6 +14,7 @@ class ChatBot:
         """初始化聊天机器人"""
         print(f"正在加载模型 {model_path}...")
         self.model, self.tokenizer = load(model_path)
+        self.sampler = make_sampler(temp=0.7, top_p=0.9)
         self.history = []
         print("模型加载完成！\n")
 
@@ -32,8 +34,8 @@ class ChatBot:
             self.model,
             self.tokenizer,
             prompt=prompt,
-            max_tokens=500,
-            temp=0.7
+            sampler=self.sampler,
+            max_tokens=500
         )
 
         # 添加助手回复到历史

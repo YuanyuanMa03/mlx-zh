@@ -109,35 +109,53 @@ print(f"速度: {tokens_generated/elapsed:.2f} tokens/秒")
 
 ### 采样参数
 
+MLX-LM 使用 `make_sampler` 来控制采样参数：
+
 ```python
-from mlx_lm import load, generate
+from mlx_lm import load, generate, stream_generate
+from mlx_lm.sample_utils import make_sampler
+import mlx.core as mx
 
 model, tokenizer = load("mlx-community/Qwen2-7B-Instruct-4bit")
 
+# 创建采样器
+sampler = make_sampler(
+    temp=0.7,        # 温度：0=贪婪采样，>0=随机采样
+    top_p=0.9,       # nucleus sampling
+    top_k=50,        # top-k sampling
+)
+
+# 使用采样器生成
 response = generate(
     model,
     tokenizer,
     prompt="写一首关于春天的诗",
-    max_tokens=200,      # 最大生成 token 数
-    temp=0.8,            # 温度：越高越随机
-    top_p=0.9,           # nucleus sampling
-    top_k=50,            # top-k sampling
-    seed=42,             # 随机种子（可重复性）
+    sampler=sampler,
+    max_tokens=200,
     verbose=True
 )
 ```
 
-### 参数说明
+### 采样参数说明
 
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
-| `max_tokens` | int | 100 | 最大生成 token 数 |
-| `temp` | float | 0.0 | 温度参数 (0-1)，越高越随机 |
-| `top_p` | float | 1.0 | Nucleus sampling 阈值 |
-| `top_k` | int | -1 | Top-k sampling |
-| `seed` | int | None | 随机种子 |
-| `verbose` | bool | False | 是否显示生成详情 |
-| `formatter` | callable | None | 自定义输出格式 |
+| `temp` | float | 0.0 | 温度：0=贪婪采样，>0 越高越随机 |
+| `top_p` | float | 0.0 | Nucleus sampling 阈值 (0-1) |
+| `top_k` | int | 0 | Top-k sampling (0=禁用) |
+| `min_p` | float | 0.0 | 最小概率阈值 |
+| `min_tokens_to_keep` | int | 1 | min_p 保留的最小 token 数 |
+
+### 随机种子
+
+```python
+import mlx.core as mx
+
+# 设置随机种子
+mx.random.seed(42)
+
+response = generate(model, tokenizer, prompt="你好", max_tokens=100)
+```
 
 ## 批量生成
 
@@ -214,10 +232,12 @@ convert(
 
 ```python
 from mlx_lm import load, generate
+from mlx_lm.sample_utils import make_sampler
 
 class QAAssistant:
     def __init__(self, model_path: str):
         self.model, self.tokenizer = load(model_path)
+        self.sampler = make_sampler(temp=0.7, top_p=0.9)
 
     def ask(self, question: str) -> str:
         messages = [{"role": "user", "content": question}]
@@ -228,8 +248,8 @@ class QAAssistant:
             self.model,
             self.tokenizer,
             prompt=prompt,
-            max_tokens=500,
-            temp=0.7
+            sampler=self.sampler,
+            max_tokens=500
         )
         return response
 
@@ -243,8 +263,12 @@ print(answer)
 
 ```python
 from mlx_lm import load, generate
+from mlx_lm.sample_utils import make_sampler
 
 model, tokenizer = load("mlx-community/Qwen2-7B-Instruct-4bit")
+
+# 创建较低温度的采样器（更确定性）
+sampler = make_sampler(temp=0.3, top_p=0.9)
 
 def summarize_text(text: str, max_length: int = 200) -> str:
     prompt = f"请用简练的语言总结以下文本：\n\n{text}"
@@ -257,8 +281,8 @@ def summarize_text(text: str, max_length: int = 200) -> str:
         model,
         tokenizer,
         prompt=formatted_prompt,
-        max_tokens=max_length,
-        temp=0.5
+        sampler=sampler,
+        max_tokens=max_length
     )
     return summary
 
@@ -272,8 +296,12 @@ print(f"摘要: {summary}")
 
 ```python
 from mlx_lm import load, generate
+from mlx_lm.sample_utils import make_sampler
 
 model, tokenizer = load("mlx-community/Qwen2.5-Coder-7B-Instruct-4bit")
+
+# 代码生成使用低温度（更确定性）
+code_sampler = make_sampler(temp=0.2, top_p=0.95)
 
 def generate_code(description: str, language: str = "Python") -> str:
     prompt = f"用{language}写一个{description}"
@@ -286,8 +314,8 @@ def generate_code(description: str, language: str = "Python") -> str:
         model,
         tokenizer,
         prompt=formatted_prompt,
-        max_tokens=500,
-        temp=0.2  # 代码生成用较低的温度
+        sampler=code_sampler,
+        max_tokens=500
     )
     return code
 

@@ -6,6 +6,7 @@
 """
 
 from mlx_lm import load, generate
+from mlx_lm.sample_utils import make_sampler
 
 
 class CodeAssistant:
@@ -13,6 +14,10 @@ class CodeAssistant:
         """初始化代码助手"""
         print("正在加载代码模型...")
         self.model, self.tokenizer = load(model_path)
+        # 代码生成使用低温度（更确定性）
+        self.code_sampler = make_sampler(temp=0.2, top_p=0.95)
+        # 代码解释使用稍高的温度
+        self.explain_sampler = make_sampler(temp=0.4, top_p=0.9)
         print("模型加载完成！\n")
 
     def generate_code(self, description: str, language: str = "Python") -> str:
@@ -28,8 +33,8 @@ class CodeAssistant:
             self.model,
             self.tokenizer,
             prompt=formatted_prompt,
-            max_tokens=500,
-            temp=0.2  # 代码生成使用较低温度
+            sampler=self.code_sampler,
+            max_tokens=500
         )
 
         return code
@@ -47,8 +52,8 @@ class CodeAssistant:
             self.model,
             self.tokenizer,
             prompt=formatted_prompt,
-            max_tokens=400,
-            temp=0.5
+            sampler=self.explain_sampler,
+            max_tokens=400
         )
 
         return explanation

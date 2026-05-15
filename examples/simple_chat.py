@@ -6,6 +6,7 @@
 """
 
 from mlx_lm import load, generate
+from mlx_lm.sample_utils import make_sampler
 
 
 def main():
@@ -13,6 +14,9 @@ def main():
     print("正在加载模型...")
     model, tokenizer = load("mlx-community/Qwen2-7B-Instruct-4bit")
     print("模型加载完成！\n")
+
+    # 创建采样器
+    sampler = make_sampler(temp=0.7, top_p=0.9)
 
     # 简单对话
     questions = [
@@ -35,8 +39,8 @@ def main():
             model,
             tokenizer,
             prompt=prompt,
+            sampler=sampler,
             max_tokens=300,
-            temp=0.7,
             verbose=False
         )
 
