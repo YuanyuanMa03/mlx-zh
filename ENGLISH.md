@@ -76,7 +76,7 @@ mlx_lm.generate --model Qwen/Qwen2.5-7B-Instruct --prompt "写一首关于春天
 from mlx_lm import load, generate
 
 # Load model
-model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")
+model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-4bit")
 
 # Generate text
 messages = [{"role": "user", "content": "你好"}]
@@ -89,7 +89,7 @@ text = generate(model, tokenizer, prompt=prompt, verbose=True)
 ```python
 from mlx_lm import load, stream_generate
 
-model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")
+model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-4bit")
 
 for response in stream_generate(model, tokenizer, "Tell me a story", max_tokens=512):
     print(response.text, end="", flush=True)
@@ -101,7 +101,7 @@ More examples in the [examples](./examples) directory.
 
 | Model | Parameters | Quantized | Best For |
 |-------|------------|-----------|----------|
-| [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) | 7B | [4bit](https://huggingface.co/mlx-community/Qwen2.5-7B-Instruct-4bit) | General chat |
+| [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) | 7B | [4bit](https://huggingface.co/mlx-community/Qwen3.5-9B-MLX-4bit) | General chat |
 | [Qwen2.5-14B-Instruct](https://huggingface.co/Qwen/Qwen2.5-14B-Instruct) | 14B | [4bit](https://huggingface.co/mlx-community/Qwen2.5-14B-Instruct-4bit) | Complex tasks |
 | [Qwen2.5-32B-Instruct](https://huggingface.co/Qwen/Qwen2.5-32B-Instruct) | 32B | [4bit](https://huggingface.co/mlx-community/Qwen2.5-32B-Instruct-4bit) | High quality |
 | [Qwen2.5-Coder-7B](https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct) | 7B | [4bit](https://huggingface.co/mlx-community/Qwen2.5-Coder-7B-Instruct-4bit) | Code generation |

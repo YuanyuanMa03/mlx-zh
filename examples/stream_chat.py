@@ -11,7 +11,7 @@ from mlx_lm.sample_utils import make_sampler
 
 def main():
     print("正在加载模型...")
-    model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")
+    model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-4bit")
     print("模型加载完成！\n")
 
     # 创建采样器

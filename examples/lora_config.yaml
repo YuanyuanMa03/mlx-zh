@@ -2,7 +2,7 @@
 # 适用于中文模型微调
 
 # 模型配置
-model: "mlx-community/Qwen2.5-7B-Instruct-4bit"
+model: "mlx-community/Qwen3.5-9B-MLX-4bit"
 
 # 数据配置
 data: "./data"

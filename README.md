@@ -61,7 +61,7 @@ mlx_lm.generate --prompt "你好，请介绍一下你自己"
 mlx_lm.chat
 
 # 指定模型
-mlx_lm.generate --model Qwen/Qwen2.5-7B-Instruct --prompt "写一首关于春天的诗"
+mlx_lm.generate --model Qwen/Qwen3.5-9B-MLX --prompt "写一首关于春天的诗"
 ```
 
 ---
@@ -88,7 +88,7 @@ mlx_lm.generate --model Qwen/Qwen2.5-7B-Instruct --prompt "写一首关于春天
 from mlx_lm import load, generate
 
 # 加载模型
-model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")
+model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-4bit")
 
 # 生成文本
 messages = [{"role": "user", "content": "你好"}]
@@ -101,7 +101,7 @@ text = generate(model, tokenizer, prompt=prompt, verbose=True)
 ```python
 from mlx_lm import load, stream_generate
 
-model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")
+model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-4bit")
 
 for response in stream_generate(model, tokenizer, "讲一个故事", max_tokens=512):
     print(response.text, end="", flush=True)
@@ -115,7 +115,7 @@ for response in stream_generate(model, tokenizer, "讲一个故事", max_tokens=
 
 | 模型 | 参数量 | 量化版本 | 推荐场景 |
 |------|--------|----------|----------|
-| [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) | 7B | [4bit](https://huggingface.co/mlx-community/Qwen2.5-7B-Instruct-4bit) | 通用对话 |
+| [Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen3.5-9B-MLX) | 7B | [4bit](https://huggingface.co/mlx-community/Qwen3.5-9B-MLX-4bit) | 通用对话 |
 | [Qwen2.5-14B-Instruct](https://huggingface.co/Qwen/Qwen2.5-14B-Instruct) | 14B | [4bit](https://huggingface.co/mlx-community/Qwen2.5-14B-Instruct-4bit) | 复杂任务 |
 | [Qwen2.5-32B-Instruct](https://huggingface.co/Qwen/Qwen2.5-32B-Instruct) | 32B | [4bit](https://huggingface.co/mlx-community/Qwen2.5-32B-Instruct-4bit) | 高质量输出 |
 | [Gemma-2-9B-It](https://huggingface.co/google/gemma-2-9b-it) | 9B | [4bit](https://huggingface.co/mlx-community/gemma-2-9b-it-4bit) | 英中双语 |

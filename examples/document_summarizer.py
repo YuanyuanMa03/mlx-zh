@@ -31,7 +31,7 @@ def summarize_document(model, tokenizer, sampler, text: str, max_length: int = 2
 
 def main():
     print("正在加载模型...")
-    model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")
+    model, tokenizer = load("mlx-community/Qwen3.5-9B-MLX-4bit")
     # 摘要使用较低温度，输出更稳定
     sampler = make_sampler(temp=0.3, top_p=0.9)
     print("模型加载完成！\n")
