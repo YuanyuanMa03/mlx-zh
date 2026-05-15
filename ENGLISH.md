@@ -53,7 +53,7 @@ mlx_lm.generate --prompt "Hello, please introduce yourself"
 mlx_lm.chat
 
 # Specify a model
-mlx_lm.generate --model Qwen/Qwen2-7B-Instruct --prompt "写一首关于春天的诗"
+mlx_lm.generate --model Qwen/Qwen2.5-7B-Instruct --prompt "写一首关于春天的诗"
 ```
 
 ## Documentation
@@ -76,7 +76,7 @@ mlx_lm.generate --model Qwen/Qwen2-7B-Instruct --prompt "写一首关于春天�
 from mlx_lm import load, generate
 
 # Load model
-model, tokenizer = load("mlx-community/Qwen2-7B-Instruct-4bit")
+model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")
 
 # Generate text
 messages = [{"role": "user", "content": "你好"}]
@@ -89,7 +89,7 @@ text = generate(model, tokenizer, prompt=prompt, verbose=True)
 ```python
 from mlx_lm import load, stream_generate
 
-model, tokenizer = load("mlx-community/Qwen2-7B-Instruct-4bit")
+model, tokenizer = load("mlx-community/Qwen2.5-7B-Instruct-4bit")
 
 for response in stream_generate(model, tokenizer, "Tell me a story", max_tokens=512):
     print(response.text, end="", flush=True)

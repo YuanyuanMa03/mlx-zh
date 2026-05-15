@@ -51,7 +51,7 @@ class ChatBot:
 
 def main():
     # 创建聊天机器人
-    bot = ChatBot("mlx-community/Qwen2-7B-Instruct-4bit")
+    bot = ChatBot("mlx-community/Qwen2.5-7B-Instruct-4bit")
 
     print("=" * 50)
     print("简单聊天机器人")
